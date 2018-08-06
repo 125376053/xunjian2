@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <title>海绵城市巡检维护</title>
+</head>
+<body>
+<script>
+    (function (win, doc) {
+        function change() {
+            //预设div满屏的实际宽度
+            doc.documentElement.style.fontSize = doc.documentElement.clientWidth / 750 * 100 + 'px';
+            // 1rem 320 42px
+            var div = win.document.createElement('div');
+            div.className = "testDiv";
+            div.style.width = '7.5rem'; //7.5下是100%页面
+            win.document.body.appendChild(div);
+            var getWidth = parseFloat(win.getComputedStyle(div).width);
+
+            if (getWidth > doc.documentElement.clientWidth) {
+                //rem计算不准
+                /*if(documentElement.clientWidth==320){
+                 doc.documentElement.style.fontSize='42.6667px';
+                 }
+                 if(documentElement.clientWidth==360){
+                 doc.documentElement.style.fontSize='48px';
+                 }
+                 if(documentElement.clientWidth==375){
+                 doc.documentElement.style.fontSize='50px';
+                 }
+                 if(documentElement.clientWidth==414){
+                 doc.documentElement.style.fontSize='55.2px';
+                 }
+                 if(documentElement.clientWidth==768){
+                 doc.documentElement.style.fontSize='102.4px';
+                 }
+                 if(documentElement.clientWidth==1024){
+                 doc.documentElement.style.fontSize='136.533px';
+                 }*/
+                var ratio = getWidth / doc.documentElement.clientWidth;
+                doc.documentElement.style.fontSize = (doc.documentElement.clientWidth / 750 * 100 / ratio) + 'px';
+            } else {
+                doc.documentElement.style.fontSize = doc.documentElement.clientWidth / 750 * 100 + 'px';
+            }
+        }
+
+        change();
+        win.addEventListener('resize', change, false);
+    })(window, document);
+</script>
+<link rel="stylesheet" href="static/css/all.css">
+
+<div id="app" style="position: fixed;z-index:9999;"></div>
+
+<div class="noLine" id="noApp1">
+    <div class="loading" id="loadingHtml" style="line-height: 1rem;font-size:.28rem;">下拉刷新</div>
+    <div class="noAppColor" id="noApp">
+        <div class="noLineGroup">
+            <img src="static/images/noLine.png" alt="">
+            <p style="font-size:.28rem;">网络不给力，请检查网络</p>
+            <p style="font-size:.28rem;">下拉刷新</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .noLine {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: .89rem;
+        bottom: 0;
+        background: #fff;
+        text-align: center;
+        z-index: 9998;
+        display:none;
+    }
+
+    .noAppColor {
+        background: #f1f2f6;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        font-size: .38rem;
+        color: #c9cace;
+        /*z-index: 100000;*/
+    }
+
+    .noLineGroup {
+        width: 4rem;
+        height: 4rem;
+        position: fixed;
+        top: 50%;
+        margin-top: -2rem;
+        left: 50%;
+        margin-left: -2rem;
+    }
+
+    .loading {
+        width: 1.5rem;
+        height: 1rem;
+        margin: .5rem auto 0;
+    }
+</style>
+<script src="static/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript"
+        src="http://webapi.amap.com/maps?v=1.4.4&key=6265368f89065554d074984d39ee9afa&plugin=AMap.Geocoder"></script>
+<script src="static/js/radialIndicator.js"></script>
+
+</body>
+</html>
+<script>
+
+
+    /*手机点击返回键 返回并刷新 解决浏览器本身缓存问题*/
+    function testBack() {
+        let path = window.location.hash.substring(1)
+        if (path == '/') {
+            if (window.disposal) {
+                window.disposal.finishCurActivity()
+            }
+        } else {
+            window.history.go(-1);
+        }
+    }
+
+    let ticket;
+    let user = window.localStorage.getItem('user');
+    if (user) {
+        ticket = JSON.parse(user).ticket;
+        if (window.disposal) {
+            window.disposal.giveTicket(ticket)
+        }
+    }
+
+
+    var noApp1 = document.getElementById('noApp1');//外层元素
+    var noApp = document.getElementById('noApp');//拖拽元素
+    var app = document.getElementById('app');
+    var loadingHtml=document.getElementById("loadingHtml");
+    var timer=null;
+
+    //监控网络 安卓那边有接口 我直接在这里写逻辑就行
+    function onNetWorkConnected() {
+        noApp1.style.display = 'none';
+        //app.style.display = 'block';
+    }
+
+    //没网
+    function onNetWorkDisConnected() {
+        noApp1.style.display = 'block';
+        //app.style.display = 'none';
+    }
+
+    //获取网络
+    if (window.disposal) {
+        let wang = window.disposal.isNetWorkConnected()
+        if (wang) {
+            noApp1.style.display = 'none';
+            //app.style.display = 'block';
+        } else {
+            noApp1.style.display = 'block';
+            //app.style.display = 'none';
+        }
+    }
+
+    //获取网络2
+    if (window.order) {
+        let wang = window.order.isNetWorkConnected()
+        if (wang) {
+            noApp1.style.display = 'none';
+            //app.style.display = 'block';
+        } else {
+            noApp1.style.display = 'block';
+            //app.style.display = 'none';
+        }
+    }
+
+    //下拉刷新检测网络效果
+    var y = 0;
+    var y2 = 0;
+    noApp.addEventListener('touchstart', start, false)
+
+    function start(e) {
+        y = e.changedTouches[0].pageY-noApp.offsetTop;
+        loadingHtml.innerHTML="下拉刷新"
+        noApp.addEventListener('touchmove', move, false)
+        noApp.addEventListener('touchend', end, false)
+    }
+
+    function move(e) {
+        y2 = e.changedTouches[0].pageY-noApp.offsetTop;
+        if (y2 - y > 0) {
+
+            if (y2 - y < 120) {
+
+                loadingHtml.innerHTML = "下拉刷新"
+
+                noApp.style.top = y2 - y + 'px';
+                noApp.style.WebkitTransition = "0.5s linear";
+                clearTimeout(timer)
+                timer = setTimeout(function () {
+                    loadingHtml.innerHTML = "释放刷新"
+                }, 500)
+            }
+
+        }
+    }
+    function end() {
+        noApp.style.top = '.89rem';
+        noApp.style.WebkitTransition = "0.5s linear 1s";
+        loadingHtml.innerHTML="刷新中..."
+        noApp.removeEventListener('touchstart', move);
+        noApp.removeEventListener('touchmove', end);
+        clearTimeout(timer)
+        timer=setTimeout(function(){
+            loadingHtml.innerHTML="刷新完成"
+        },1000)
+
+        //鼠标抬起监控 刷新页面
+        noApp.addEventListener('transitionend', function () {
+            if (window.disposal) {
+                let wang = window.disposal.isNetWorkConnected()
+                if (wang) {
+                    noApp1.style.display = 'none';
+                    //app.style.display = 'block';
+                } else {
+                    noApp1.style.display = 'block';
+                    //app.style.display = 'none';
+                }
+            }
+        }, false)
+    }
+
+    //alert
+    function jalert(str, code, fn) {
+
+        if ($(".odiv").length > 0) {
+            return;
+        }
+
+        var odiv = $('<div class="odiv"><p>提示</p><p>' + str + '</p><div class="jbtn"></div>');
+        if (code) {
+            odiv.find(".jbtn").html('<a id="closed2">取消</a><a id="closed1">确定</a>')
+        } else {
+            odiv.find(".jbtn").html('<a id="closed1">确定</a>')
+        }
+        odiv.css({
+            position: 'fixed',
+            zIndex: '9999',
+            width: '80%',
+            height: '3rem',
+            background: '#fff',
+            borderRadius: '5px',
+            left: '50%',
+            top: '50%',
+            marginLeft: '-40%',
+            marginTop: '-1.5rem'
+        });
+
+        odiv.find('p').css({
+            textAlign: 'center',
+            fontSize: '.32rem',
+            marginTop: '.3rem'
+        });
+        odiv.find(".jbtn").css({
+            position: 'absolute',
+            width: '100%',
+            height: '1rem',
+            bottom: '0rem',
+            textAlign: 'center',
+            borderTop: '1px solid #dedede'
+        });
+        odiv.find(".jbtn").find('a').css({
+            width: '2rem',
+            heihgt: '1rem',
+            textAlign: 'center',
+            lineHeight: '1rem',
+            display: 'inline-block',
+            fontSize: '.32rem'
+        });
+        var zhezhao = $("<div class='zhezhao'>");
+        zhezhao.css({
+            position: 'fixed',
+            left: '0',
+            top: '0',
+            right: '0',
+            bottom: '0',
+            background: '#000',
+            opacity: '0.1',
+            zIndex: '9998'
+        });
+
+        odiv.appendTo($('body'));
+        zhezhao.appendTo($('body'));
+
+        odiv.find("#closed1").click(function (event) {
+            event.stopPropagation();
+            $(this).parents('.odiv').next().remove();
+            $(this).parents('.odiv').remove();
+            fn && fn($(this));
+        });
+
+        odiv.find("#closed2").click(function () {
+            event.stopPropagation();
+            $(this).parents('.odiv').next().remove();
+            $(this).parents('.odiv').remove();
+            fn && fn($(this));
+        });
+    }
+</script>
