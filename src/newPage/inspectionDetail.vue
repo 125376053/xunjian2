@@ -29,8 +29,8 @@
                     <p class="title">
                         <span>{{item.Items[0].TypeValueName}}</span>
                         <span :style="{
-                            'color':jieguo=='正常'?'green':'red'
-                        }">{{jieguo}}</span>
+                            'color':result2(item.Items)?'正常':'故障'
+                        }">{{result2(item.Items)?'正常':'故障'}}</span>
                     </p>
                     <ul>
                         <li class="infor" v-for="(item1,index1) in item.Items">
@@ -78,6 +78,19 @@
                 } else {
                     return j = '故障'
                 }
+            },
+            result2(arr){
+                return (arr)=>{
+                    let f=1
+                    arr.forEach((item)=>{
+                        if(item.Result==1){
+                            f=1
+                        }else{
+                            f=0
+                        }
+                    })
+                    return f;
+                }
             }
         },
         components: {
@@ -122,22 +135,28 @@
                     }
                 }
                 this.data2 = newArr
-                this.setResult()
+                // this.setResult()
             },
             setResult(){
-                let f = 1
+
                 this.data2.forEach((item) => {
+
+                    let f = 1
+
                     item.Items.forEach(i=>{
+                        console.log(i.Result);
                         if(i.Result==0){
                             f=0
                         }
                     })
+
+                    if (f > 0) {
+                        this.jieguo = '正常'
+                    } else {
+                        this.jieguo = '故障'
+                    }
                 })
-                if (f > 0) {
-                    this.jieguo = '正常'
-                } else {
-                    this.jieguo = '故障'
-                }
+
             }
         }
     }

@@ -63,8 +63,8 @@
                     this.$router.push({
                         path:path,
                         query: {
-                            RelateId: '',
-                            WorkOrderId: ''
+                            RelateId:'',
+                            WorkOrderId:''
                         }
                     })
                 }else{

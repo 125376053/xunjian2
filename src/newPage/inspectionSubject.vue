@@ -52,7 +52,7 @@
                 title:'',
                 sheshiid:this.$route.query.sheshiid || ' ',
                 RelateId:this.$route.query.RelateId || ' ',
-                WorkOrderId: this.$route.query.WorkOrderId || '',
+                WorkOrderId: this.$route.query.WorkOrderId,
                 data: [],
                 modiaFlag: false,
                 selectSubject: [],
