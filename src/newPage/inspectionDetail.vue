@@ -24,12 +24,12 @@
                 </div>
             </div>
 
-            <ul>
+            <ul class="detail">
                 <li v-for="(item,index) in data2" style="border-top: 7px solid #f1f2f6;">
                     <p class="title">
                         <span>{{item.Items[0].TypeValueName}}</span>
                         <span :style="{
-                            'color':result2(item.Items)?'正常':'故障'
+                            'color':result2(item.Items)?'green':'red'
                         }">{{result2(item.Items)?'正常':'故障'}}</span>
                     </p>
                     <ul>
@@ -83,13 +83,14 @@
                 return (arr)=>{
                     let f=1
                     arr.forEach((item)=>{
-                        if(item.Result==1){
-                            f=1
-                        }else{
+                        if(!item.Result){
                             f=0
+                        }else{
+
                         }
                     })
-                    return f;
+                    console.log(f);
+                    return f
                 }
             }
         },
@@ -167,13 +168,12 @@
         top: 0.89rem;
         left: 0;
         right: 0;
-        background: #fff;
-        bottom:1rem;
+        bottom:0rem;
         overflow: auto;
     }
 
-    .inspect>li {
-        border-bottom: 7px solid #f1f2f4;
+    .inspect .detail>li {
+        background: #fff;
     }
 
     .inspect > li:last-child{
@@ -209,23 +209,12 @@
         border-bottom: 0;
     }
 
-    .wancheng1 {
-        height: .9rem;
-        background: #2a6eca;
-        position: fixed;
-        bottom: .5rem;
-        left: .27rem;
-        right: .27rem;
-        line-height: .9rem;
-        text-align: center;
-        color: #fff;
-    }
-
     .detail_xunjian .title {
         display: flex;
         justify-content: space-between;
         align-content: center;
         height: .8rem;
         border-bottom: 0;
+        background: #fff;
     }
 </style>

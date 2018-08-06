@@ -20,10 +20,11 @@
                 </ul>
             </li>
         </ul>
-        <div class="wancheng1" @click="saveFn" v-if="WorkOrderId">保存</div>
+        <div :style="{'bottom':'1.5rem'}" class="wancheng1" @click="saveFn" v-if="WorkOrderId">保存</div>
 
         <div class="wancheng2" :style="{
-            'background':!WorkOrderId?'#2a6eca':'#ccc'
+            'background':!WorkOrderId?'#2a6eca':'#ccc',
+            'bottom':'0.5rem'
         }" @click="wanchengFn">完成</div>
 
 
@@ -229,18 +230,18 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .inspect {
         position: absolute;
         top: 0.89rem;
         left: 0;
         right: 0;
-        background: #fff;
         bottom: 2.1rem;
         overflow: auto;
     }
 
     .inspect > li {
+        background: #fff;
         border-bottom: 7px solid #f1f2f6;
     }
     .inspect > li:last-child{
@@ -277,6 +278,9 @@
         border-bottom: 0;
     }
 
+    /* 其他页面这个样式bottom:0.5有时候起作用 导致样式和wangcheng2叠一起 就出现了 保存按钮有时候消失
+        不是workerid的问题
+     */
     .wancheng1 {
         height: .9rem;
         background: #2a6eca;
