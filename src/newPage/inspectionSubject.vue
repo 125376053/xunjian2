@@ -111,6 +111,20 @@
                 })
                 this.submitResult()
             },
+
+            /*
+
+             点保存和完成以后的跳转
+             1 如果是从消息列表进来的  如果是片区巡检返回到选择设施页面，如果是主设施直接返回到消息列表
+             2.如果是从底部进来的，返回到选择设施页面
+
+             在选择设施页面点击返回
+             1，如果是从消息列表进来的，返回到消息列表
+             2.如果是从底部进来的，返回到首页；
+
+
+             */
+
             // 保存结果
             submitResult(){
                 //提交巡检结果
@@ -132,7 +146,33 @@
                                     WorkOrderId: this.$route.query.WorkOrderId
                                 }
                             })*/
-                            this.$router.go(-1)
+
+                            // workid存在 从列表进来的 否则从底部巡检进来的
+                            // 是否有经纬度地址等信息 主片区没有经纬地址
+                            if(this.$route.query.WorkOrderId){
+                                if(this.$route.query.jingdu || this.$route.query.weidu || this.$route.query.adress || this.$route.query.sheshiname){
+                                    this.$router.push({
+                                        path: '/selectSheshi',
+                                        query: {
+                                            RelateId: this.$route.query.RelateId,
+                                            WorkOrderId: this.$route.query.WorkOrderId
+                                        }
+                                    })
+                                }else{
+                                    this.$router.push({
+                                        path: '/message'
+                                    })
+                                }
+                            }else{
+                                this.$router.push({
+                                    path: '/selectSheshi',
+                                    query: {
+                                        RelateId: '',
+                                        WorkOrderId: ''
+                                    }
+                                })
+                            }
+                            // this.$router.go(-1)
                         }, 2000)
                     }else{
                         this.$toast({
@@ -181,7 +221,32 @@
                             duration: 2000
                         })
                         setTimeout(() => {
-                            this.$router.go(-1)
+                            // this.$router.go(-1)
+
+                            if(this.$route.query.WorkOrderId){
+                                if(this.$route.query.jingdu || this.$route.query.weidu || this.$route.query.adress || this.$route.query.sheshiname){
+                                    this.$router.push({
+                                        path: '/selectSheshi',
+                                        query: {
+                                            RelateId: this.$route.query.RelateId,
+                                            WorkOrderId: this.$route.query.WorkOrderId
+                                        }
+                                    })
+                                }else{
+                                    this.$router.push({
+                                        path: '/message'
+                                    })
+                                }
+                            }else{
+                                this.$router.push({
+                                    path: '/selectSheshi',
+                                    query: {
+                                        RelateId: '',
+                                        WorkOrderId: ''
+                                    }
+                                })
+                            }
+
                         }, 2000)
                     }else{
                         this.$toast({

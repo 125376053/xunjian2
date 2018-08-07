@@ -7,7 +7,7 @@
                 <div class="title">
                     <p>
                         <span>设施名称:</span>
-                        <span>{{title}}</span>
+                        <span style="color:#000;">{{title}}</span>
                     </p>
                     <p>
                         <span>巡检结果:</span>
@@ -19,7 +19,7 @@
                 <div class="title">
                     <p>
                         <span>巡检时间:</span>
-                        <span>{{time}}</span>
+                        <span style="color:#000;">{{time}}</span>
                     </p>
                 </div>
             </div>

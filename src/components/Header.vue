@@ -30,7 +30,11 @@
                         path:'/'
                     })
                 }else{
-                    this.$router.go(-1)
+                    if(this.$route.path==='/selectSheshi'){
+
+                    }else{
+                        this.$router.go(-1)
+                    }
                 }
             },
         },
