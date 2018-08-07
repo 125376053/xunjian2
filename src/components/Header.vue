@@ -30,11 +30,20 @@
                         path:'/'
                     })
                 }else{
-                    if(this.$route.path==='/selectSheshi'){
-
+                    /*if(this.$route.path==='/selectSheshi'){
+                        if(this.$route.query.WorkOrderId){
+                            this.$router.replace({
+                                path: '/message'
+                            })
+                        }else{
+                            this.$router.replace({
+                                path: '/index'
+                            })
+                        }
                     }else{
                         this.$router.go(-1)
-                    }
+                    }*/
+                    this.$router.go(-1)
                 }
             },
         },

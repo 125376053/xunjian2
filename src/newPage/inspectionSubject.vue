@@ -36,7 +36,7 @@
                     <p style="font-size:.32rem; text-align: left;">您确定要提交本轮巡检结果吗？</p>
                     <div class="logout2" style="margin-left:2.1rem;">
                         <button class="quxiao" @click="gotoMyxuncha">取消</button>
-                        <span class="enter" @click="enterSave">确定</span>
+                        <span class="enter" @click.stop="enterSave">确定</span>
                     </div>
                 </div>
             </div>
@@ -50,6 +50,7 @@
     export default{
         data(){
             return {
+                bsFlag:false,
                 title:'',
                 sheshiid:this.$route.query.sheshiid || ' ',
                 RelateId:this.$route.query.RelateId || ' ',
@@ -72,6 +73,11 @@
         },
         mounted(){
             this.getData()
+        },
+        watch:{
+            $route(){
+
+            }
         },
         methods: {
             // 点击选中取消
@@ -112,19 +118,6 @@
                 this.submitResult()
             },
 
-            /*
-
-             点保存和完成以后的跳转
-             1 如果是从消息列表进来的  如果是片区巡检返回到选择设施页面，如果是主设施直接返回到消息列表
-             2.如果是从底部进来的，返回到选择设施页面
-
-             在选择设施页面点击返回
-             1，如果是从消息列表进来的，返回到消息列表
-             2.如果是从底部进来的，返回到首页；
-
-
-             */
-
             // 保存结果
             submitResult(){
                 //提交巡检结果
@@ -149,9 +142,9 @@
 
                             // workid存在 从列表进来的 否则从底部巡检进来的
                             // 是否有经纬度地址等信息 主片区没有经纬地址
-                            if(this.$route.query.WorkOrderId){
+                            /* if(this.$route.query.WorkOrderId){
                                 if(this.$route.query.jingdu || this.$route.query.weidu || this.$route.query.adress || this.$route.query.sheshiname){
-                                    this.$router.push({
+                                    this.$router.replace({
                                         path: '/selectSheshi',
                                         query: {
                                             RelateId: this.$route.query.RelateId,
@@ -159,20 +152,24 @@
                                         }
                                     })
                                 }else{
-                                    this.$router.push({
+                                    this.$router.replace({
                                         path: '/message'
                                     })
                                 }
                             }else{
-                                this.$router.push({
+                                this.$router.replace({
                                     path: '/selectSheshi',
                                     query: {
                                         RelateId: '',
                                         WorkOrderId: ''
                                     }
                                 })
+                            }*/
+                            this.$router.go(-1)
+                            //this.$toast(`${this.bsFlag}`)
+                            if(this.bsFlag){
+                                window.history.back(-1);
                             }
-                            // this.$router.go(-1)
                         }, 2000)
                     }else{
                         this.$toast({
@@ -208,6 +205,7 @@
 
             // 确定提交
             enterSave(){
+
                 this.modiaFlag=false
                 this.$indicator.open('加载中...');
                 this.$http.post(this.baseUrl + '/api/XunCha/SaveXunJianItemFinish?ticket=' + this.user.ticket,...[this.selectSubject]).then((d) => {
@@ -221,11 +219,10 @@
                             duration: 2000
                         })
                         setTimeout(() => {
-                            // this.$router.go(-1)
 
-                            if(this.$route.query.WorkOrderId){
+                            /*if(this.$route.query.WorkOrderId){
                                 if(this.$route.query.jingdu || this.$route.query.weidu || this.$route.query.adress || this.$route.query.sheshiname){
-                                    this.$router.push({
+                                    this.$router.replace({
                                         path: '/selectSheshi',
                                         query: {
                                             RelateId: this.$route.query.RelateId,
@@ -233,21 +230,26 @@
                                         }
                                     })
                                 }else{
-                                    this.$router.push({
+                                    this.$router.replace({
                                         path: '/message'
                                     })
                                 }
                             }else{
-                                this.$router.push({
+                                this.$router.replace({
                                     path: '/selectSheshi',
                                     query: {
                                         RelateId: '',
                                         WorkOrderId: ''
                                     }
                                 })
+                            }*/
+                            this.$router.go(-1)
+                            //this.$toast(`${this.bsFlag}`)
+                            if(this.bsFlag){
+                                window.history.back(-1);
                             }
-
                         }, 2000)
+
                     }else{
                         this.$toast({
                             message: '提交失败',
@@ -276,6 +278,7 @@
             },
             // 跳转到安卓巡查上报
             gotoAndroid(item){
+                this.bsFlag=true
                 console.log(item);
                 let obj = {
                     RelateId: this.$route.query.RelateId || ' ',
