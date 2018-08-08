@@ -71,7 +71,7 @@
         },
         data(){
             return{
-                title:'巡查问题管理',
+                title:'巡检问题管理',
                 activeIndex: this.$route.query.step || 0,//默认为0
                 imgsType:[
                     '',

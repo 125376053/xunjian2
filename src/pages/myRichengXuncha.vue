@@ -32,7 +32,7 @@
     export default{
         data(){
             return {
-                title:'日常巡查',
+                title:'日常巡检',
                 renwuNum:window.localStorage.getItem('renwuNum')||0,
                 messageNum:window.localStorage.getItem('messageNum')||0
             }

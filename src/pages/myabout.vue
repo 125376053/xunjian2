@@ -58,7 +58,7 @@
                     this.$indicator.close();
                     let data = d.data;
                     if(data.Model==='False'){
-                        this.$toast('暂无新版本')
+                        this.$toast('当前已是最新版本！')
                     }else{
                         this.modiaFlag=true
                     }
