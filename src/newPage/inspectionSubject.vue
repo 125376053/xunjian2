@@ -280,7 +280,7 @@
             gotoAndroid(item){
                 this.bsFlag=true
                 console.log(item);
-                let obj = {
+                /*let obj = {
                     RelateId: this.$route.query.RelateId || ' ',
                     WorkOrderId: this.$route.query.WorkOrderId || ' ',
                     jingdu: this.$route.query.jingdu || ' ',
@@ -288,6 +288,16 @@
                     adress: this.$route.query.adress || ' ',
                     sheshiid: item.SheshiOrShebeiId,
                     sheshiname: item.SheshiorShebeiName
+                }*/
+                let obj={
+                    RelateId: this.$route.query.RelateId || ' ',
+                    WorkOrderId: this.$route.query.WorkOrderId || ' ',
+                    jingdu: this.$route.query.jingdu || ' ',
+                    weidu: this.$route.query.weidu || ' ',
+                    adress: this.$route.query.adress || ' ',
+                    sheshiid: item.Typeid==2?item.SheshiOrShebeiId:'',
+                    sheshiname: item.SheshiorShebeiName,
+                    shebeiid: item.Typeid == 2 ? '' : item.SheshiOrShebeiId
                 }
                 obj = JSON.stringify(obj)
                 console.log(obj);

@@ -184,7 +184,7 @@
                     jingdu: this.$route.query.jingdu || ' ',
                     weidu: this.$route.query.weidu || ' ',
                     adress: this.$route.query.adress || ' ',
-                    sheshiid: item.SheshiOrShebeiId,
+                    sheshiid: item.SheshiOrShebeiId || this.sheshiid,
                     sheshiname: item.SheshiorShebeiName
                 }
                 obj = JSON.stringify(obj)
