@@ -23,24 +23,6 @@
 
             if (getWidth > doc.documentElement.clientWidth) {
                 //rem计算不准
-                /*if(documentElement.clientWidth==320){
-                 doc.documentElement.style.fontSize='42.6667px';
-                 }
-                 if(documentElement.clientWidth==360){
-                 doc.documentElement.style.fontSize='48px';
-                 }
-                 if(documentElement.clientWidth==375){
-                 doc.documentElement.style.fontSize='50px';
-                 }
-                 if(documentElement.clientWidth==414){
-                 doc.documentElement.style.fontSize='55.2px';
-                 }
-                 if(documentElement.clientWidth==768){
-                 doc.documentElement.style.fontSize='102.4px';
-                 }
-                 if(documentElement.clientWidth==1024){
-                 doc.documentElement.style.fontSize='136.533px';
-                 }*/
                 var ratio = getWidth / doc.documentElement.clientWidth;
                 doc.documentElement.style.fontSize = (doc.documentElement.clientWidth / 750 * 100 / ratio) + 'px';
             } else {
