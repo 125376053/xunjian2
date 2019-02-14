@@ -8,7 +8,7 @@
             <li v-for="(item,index) in data">
                 <p class="title">
                     <span>{{item.SheshiorShebeiName}}</span>
-                    <span @click="gotoAndroid">报事</span>
+                    <span @click="gotoAndroid(item)">报事</span>
                 </p>
                 <ul>
                     <li class="infor" v-for="(item1,index1) in item.Items">
